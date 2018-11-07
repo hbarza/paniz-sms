@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * CODNITIVE
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE_EULA.html.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.codnitive.com/en/terms-of-service-softwares/
+ * http://www.codnitive.com/fa/terms-of-service-softwares/
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade to newer
+ * versions in the future.
+ *
+ * @category   Codnitive
+ * @package    Codnitive_Paniz
+ * @author     Hassan Barza <support@codnitive.com>
+ * @copyright  Copyright (c) 2012 CODNITIVE Co. (http://www.codnitive.com)
+ * @license    http://www.codnitive.com/en/terms-of-service-softwares/ End User License Agreement (EULA 1.0)
+ */
+-->
+
+<config>
+	<modules>
+		<Codnitive_Paniz>
+			<version>1.0.00</version>
+			<title>Paniz SMS</title>
+			<link><![CDATA[http://www.codnitive.com/]]></link>
+			<codPool>community</codPool>
+		</Codnitive_Paniz>
+	</modules>
+	<global>
+		<blocks>
+			<paniz>
+				<class>Codnitive_Paniz_Block</class>
+			</paniz>
+		</blocks>
+		<helpers>
+			<paniz>
+				<class>Codnitive_Paniz_Helper</class>
+			</paniz>
+		</helpers>
+		<models>
+			<paniz>
+				<class>Codnitive_Paniz_Model</class>
+			</paniz>
+		</models>
+		<resources>
+			<paniz_setup>
+				<setup>
+					<module>Codnitive_Paniz</module>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</paniz_setup>
+			<paniz_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</paniz_write>
+			<paniz_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</paniz_read>
+		</resources>
+	</global>
+
+	<adminhtml>
+		<translate>
+			<modules>
+				<Codnitive_Paniz>
+					<files>
+						<default>Codnitive_Paniz.csv</default>
+					</files>
+				</Codnitive_Paniz>
+			</modules>
+		</translate>
+		<events>
+		</events>
+	</adminhtml>
+
+	<frontend>
+		<layout>
+			<updates>
+				<paniz>
+					<file>codnitive/paniz.xml</file>
+				</paniz>
+			</updates>
+		</layout>
+		<translate>
+			<modules>
+				<Codnitive_Paniz>
+					<files>
+						<default>Codnitive_Paniz.csv</default>
+					</files>
+				</Codnitive_Paniz>
+			</modules>
+		</translate>
+		<events>
+			<customer_register_success>
+				<observers>
+					<codnitive_customer_register_success>
+						<type>model</type>
+						<class>paniz/customer_observer</class>
+						<method>registerSendSms</method>
+					</codnitive_customer_register_success>
+				</observers>
+			</customer_register_success>
+			<customer_login>
+				<observers>
+					<codnitive_customer_login>
+						<type>model</type>
+						<class>paniz/customer_observer</class>
+						<method>loginSendSms</method>
+					</codnitive_customer_login>
+				</observers>
+			</customer_login>
+			<checkout_onepage_controller_success_action>
+				<observers>
+					<codnitive_checkout_onepage_success>
+						<type>model</type>
+						<class>paniz/sales_observer</class>
+						<method>orderSendSms</method>
+					</codnitive_checkout_onepage_success>
+				</observers>
+			</checkout_onepage_controller_success_action>
+		</events>
+	</frontend>
+
+	<default>
+		<codnitivepaniz>
+			<paniz>
+				<active>0</active>
+				<flash>0</flash>
+				<debug>0</debug>
+				<chkfrq>518400</chkfrq>
+				<frtrn>1</frtrn>
+			</paniz>
+			<customer>
+				<register>1</register>
+				<register_msg><![CDATA[Dear {{fullname}},
+Welcome to {{website_name}}.
+Email: {{email}}
+Password: {{password}}]]></register_msg>
+				<login>1</login>
+				<login_msg><![CDATA[Dear {{fullname}},
+Successful login to account on {{datetime}}.
+
+{{website_name}}]]></login_msg>
+			</customer>
+			<sales>
+				<order>1</order>
+				<order_admin>0</order_admin>
+				<order_msg><![CDATA[Dear {{fullname}},
+Your Order Successfuly placed on {{datetime}}.
+Order #: {{order_number}}
+Order amount: {{order_grandtotal}}
+
+{{website_name}}]]></order_msg>
+			</sales>
+		</codnitivepaniz>
+	</default>
+</config>
